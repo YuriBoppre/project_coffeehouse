@@ -2,7 +2,7 @@
 
 ![logo](https://github.com/YuriBoppre/project_coffee/assets/79061705/7dd72fb1-7c9f-40d8-add0-ef24fc941cc6)
 
-Petit Gato - Busca uma experiencia única, com um ambiente acolhedor e relaxante, além de uma decoração temática, com detalhes que remetem a gatos em cada canto, proporcionando uma atmosfera encatadora que fará você se sentir como se estivesse em uma paraíso felino.
+Petit Gato - Busca uma experiencia única, com um ambiente acolhedor e relaxante, além de uma decoração temática, com detalhes que remetem a gatos em cada canto, proporciona uma atmosfera encatadora que fará você se sentir como se estivesse em uma paraíso felino.
 
 ### Equipe:
 
