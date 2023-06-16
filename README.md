@@ -18,7 +18,9 @@ Petit Gato - Busca uma experiencia única, com um ambiente acolhedor e relaxante
 
 ### Modelo Físico:
 
-Em desenvolvimento
+<a href="https://dbdiagram.io/d/648b307d722eb7749408cc6d">
+<img src="PowerCoffe Database Phys.Model.png">
+</a>
 
 ### Dicionário de Dados:
 
@@ -28,11 +30,11 @@ Em desenvolvimento
 
 Em desenvolvimento
 
-### Scripts Popula tabelas:
+### Objetos de BD (stored procedure, triggers e functions):
 
 Em desenvolvimento
 
-### Objetos de BD (stored procedure, triggers e functions):
+### Scripts Popula tabelas:
 
 Em desenvolvimento
 
