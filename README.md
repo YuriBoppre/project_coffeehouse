@@ -28,7 +28,7 @@ Em desenvolvimento
 
 ### Scripts DDL Criação do Database:
 
-Em desenvolvimento
+[Tabelas e FKs](/Scripts/Tables%20and%20FKs.sql)
 
 ### Objetos de BD (stored procedure, triggers e functions):
 
