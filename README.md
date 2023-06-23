@@ -24,9 +24,9 @@ Petit Gato - Busca uma experiencia única, com um ambiente acolhedor e relaxante
 
 ### Dicionário de Dados:
 
-Segue Link com acesso ao Dicionário de Dados contendo as tabelas e índices:
-<a href="https://docs.google.com/spreadsheets/d/1NxeMTS-DHHsy4z9dzWAf5quqe0PleWZoKah7rbZ_p4Y/edit?usp=sharing">
-</a>
+Link com acesso ao Dicionário de Dados contendo as tabelas e índices:
+[Tabelas + índices](https://docs.google.com/spreadsheets/d/1NxeMTS-DHHsy4z9dzWAf5quqe0PleWZoKah7rbZ_p4Y/edit?usp=sharing)
+
 
 ### Scripts DDL Criação do Database:
 
