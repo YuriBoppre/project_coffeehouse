@@ -29,7 +29,8 @@ CREATE TABLE customerorder (
   customerid integer NOT NULL,
   tableid integer NOT NULL,
   total numeric(15,2) NOT NULL,
-  date timestamp NOT NULL
+  date timestamp NOT NULL,
+  opened boolean NOT NULL DEFAULT False
 );
 
 CREATE TABLE orderitem (
