@@ -38,7 +38,7 @@ Em desenvolvimento
 
 ### Scripts Popula tabelas:
 
-Em desenvolvimento
+[Popula tabelas](/Scripts/Popula%20tabelas.sql)
 
 ### Código do sistema:
 
