@@ -32,3 +32,40 @@ END;
 $function$;
 
 create trigger orderitem_aiu after INSERT OR UPDATE on orderitem for each row execute function f_orderitem_aiu();
+
+---------------------------------------------------------------------------------------------------------------------
+
+CREATE or REPLACE FUNCTION f_payment_bi() RETURNS trigger AS $$
+declare payment_cacheid int;
+declare payment_tableid int;
+declare total_order numeric; 
+declare total_value numeric;
+declare free_table boolean;
+declare close_order boolean;
+begin
+	select cacheid into payment_cacheid from cache where cache.date = cast(new.date as date);
+	if payment_cacheid is null then
+		insert into cache(total, date) values(new.value, new.date);
+	else
+		update cache set total = total + new.value where cacheid = payment_cacheid;
+	end if;
+
+	select total into total_order from customerorder where customerorder.orderid = new.orderid;
+	select sum(value) into total_value from payment where payment.orderid = new.orderid;
+	if total_value is null then
+		close_order := not (new.value <> total_order);
+	else
+		close_order := not (total_value + new.value <> total_order);
+	end if;
+
+	if close_order then
+		update customerorder set opened = false where orderid = new.orderid;
+	end if;
+  
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER payment_bi BEFORE insert ON payment for each row EXECUTE FUNCTION f_payment_bi();
+
+
