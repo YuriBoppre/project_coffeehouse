@@ -68,4 +68,51 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER payment_bi BEFORE insert ON payment for each row EXECUTE FUNCTION f_payment_bi();
 
+---------------------------------------------------------------------------------------------------------------------
+
+CREATE or REPLACE FUNCTION all_order_closed(_tableid integer)
+RETURNS boolean
+language plpgsql AS $$
+declare result boolean;
+begin
+	select count(1) = 0 into result
+	from customerorder c
+	where tableid = _tableid and opened;
+	return result;
+END;
+$$;
+
+------------------------------------------------------------
+
+CREATE or REPLACE FUNCTION f_customerorder_au()
+RETURNS trigger
+LANGUAGE plpgsql AS $$
+declare free_table boolean;
+begin
+	select all_order_closed(new.tableid) into free_table;
+	if free_table then
+		update coffeetable set occupied = false where tableid = new.tableid;
+	end if;
+	RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER customerorder_au AFTER UPDATE ON customerorder for each row EXECUTE FUNCTION f_customerorder_au();
+
+------------------------------------------------------------
+
+CREATE or REPLACE FUNCTION f_coffeetable_bu()
+RETURNS trigger
+LANGUAGE plpgsql AS $$
+declare free_table boolean;
+begin
+	select all_order_closed(new.tableid) into free_table;
+	if (not new.occupied) and (not free_table) then
+		RAISE EXCEPTION 'Para liberar a mesa é necessário que todos os pedidos estejam pagos!';
+	end if;
+	RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER coffeetable_bu AFTER UPDATE ON coffeetable for each row EXECUTE FUNCTION f_coffeetable_bu();
 
