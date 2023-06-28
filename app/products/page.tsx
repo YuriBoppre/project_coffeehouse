@@ -12,6 +12,7 @@ const getItems = async () => {
       description: true,
       price: true,
       active: true,
+      category: true
     },
   });
   return res;
@@ -28,29 +29,30 @@ const Item = async () => {
   return (
     <div>
       <div className="mb-2">
-        <AddProduct items={items} />
+        <AddProduct categorys={categorys} />
       </div>
 
       <table className="table w-full">
         <thead>
           <tr>
             <th>#</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Brand</th>
-            <th className="text-center">Actions</th>
+            <th>Nome do produto</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Categoria</th>
+            <th className="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
           {items.map((i, index) => (
             <tr key={i.itemid}>
               <td>{index + 1}</td>
-              <td>{item.description}</td>
-              <td>{item.price}</td>
-              <td>{item.category.description}</td>
+              <td>{i.description}</td>
+              <td>{i.price}</td>
+              <td>{i.category.description}</td>
               <td className="flex justify-center space-x-1">
-                <UpdateProduct categorys={categorys} items={items} />
-                <DeleteProduct items={items} />
+                <UpdateProduct category={categorys} item={i} />
+                <DeleteProduct item={i} />
               </td>
             </tr>
           ))}

@@ -32,18 +32,18 @@ const DeleteItem = ({ item }: { item: item }) => {
   return (
     <div>
       <button className="btn btn-error btn-sm" onClick={handleModal}>
-        Delete
+        Deletar
       </button>
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">
-            Are sure to delete {item.description}?
+            Tem certeza deseja deletar: {item.description}?
           </h3>
 
           <div className="modal-action">
             <button type="button" className="btn" onClick={handleModal}>
-              No
+              Não
             </button>
             {!isLoading ? (
               <button
@@ -51,11 +51,11 @@ const DeleteItem = ({ item }: { item: item }) => {
                 onClick={() => handleDelete(item.itemid)}
                 className="btn btn-primary"
               >
-                Yes
+                Sim
               </button>
             ) : (
               <button type="button" className="btn loading">
-                Deleting...
+                Deletando...
               </button>
             )}
           </div>

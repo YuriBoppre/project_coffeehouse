@@ -19,7 +19,7 @@ model category {
 
 model item {
   itemid       Int      @id @default(autoincrement())
-  bategory     category    @relation(fields: [categoryid], references: [categoryid])
+  category     category    @relation(fields: [categoryid], references: [categoryid])
   categoryid   Int
   description  String
   price        Float

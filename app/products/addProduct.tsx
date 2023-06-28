@@ -4,11 +4,11 @@ import type { category } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const AddItem = ({ categorys }: { categorys: category[] }) => {
+const AddProduct = ({ categorys }: { categorys: category[] }) => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [active, setActive] = useState(false);
+  const [activeItem, setActiveItem] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,13 +21,13 @@ const AddItem = ({ categorys }: { categorys: category[] }) => {
       category: Number(category),
       description: description,
       price: Number(price),
-      active: Boolean(active)
+      active: Boolean(activeItem)
     });
     setIsLoading(false);
     setDescription("");
     setPrice("");
     setCategory("");
-    setActive(false);
+    setActiveItem(true);
     router.refresh();
     setIsOpen(false);
   };
@@ -36,18 +36,26 @@ const AddItem = ({ categorys }: { categorys: category[] }) => {
     setIsOpen(!isOpen);
   };
 
+  const handleUpdateActive = (value: string) => {
+    if (value === 'true') {
+      return setActiveItem(true)
+    }
+
+    setActiveItem(false)
+  }
+
   return (
     <div>
       <button className="btn" onClick={handleModal}>
-        Add New
+        Adicionar novo
       </button>
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Product</h3>
+          <h3 className="font-bold text-lg">Novo produto</h3>
           <form onSubmit={handleSubmit}>
             <div className="form-control w-full">
-              <label className="label font-bold">Product Name</label>
+              <label className="label font-bold">Nome do produto</label>
               <input
                 type="text"
                 value={description}
@@ -57,7 +65,7 @@ const AddItem = ({ categorys }: { categorys: category[] }) => {
               />
             </div>
             <div className="form-control w-full">
-              <label className="label font-bold">Price</label>
+              <label className="label font-bold">Preço</label>
               <input
                 type="text"
                 value={price}
@@ -67,14 +75,24 @@ const AddItem = ({ categorys }: { categorys: category[] }) => {
               />
             </div>
             <div className="form-control w-full">
-              <label className="label font-bold">Brand</label>
+              <label className="label font-bold">Status</label>
+              <select 
+                value={activeItem === true ? 'true' : 'false'}
+                onChange={(e) => handleUpdateActive(e.target.value)} 
+                className="select select-bordered">
+                  <option value={'true'}>Ativo</option>
+                  <option value={'false'}>Inativo</option>
+              </select>
+            </div>
+            <div className="form-control w-full">
+              <label className="label font-bold">Categoria</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="select select-bordered"
               >
                 <option value="" disabled>
-                  Select a Brand
+                  Selecione uma categoria
                 </option>
                 {categorys.map((icategory) => (
                   <option value={icategory.categoryid} key={icategory.categoryid}>
@@ -85,15 +103,15 @@ const AddItem = ({ categorys }: { categorys: category[] }) => {
             </div>
             <div className="modal-action">
               <button type="button" className="btn" onClick={handleModal}>
-                Close
+                Fechar
               </button>
               {!isLoading ? (
                 <button type="submit" className="btn btn-primary">
-                  Save
+                  Salvar
                 </button>
               ) : (
                 <button type="button" className="btn loading">
-                  Saving...
+                  Salvando...
                 </button>
               )}
             </div>
@@ -104,4 +122,4 @@ const AddItem = ({ categorys }: { categorys: category[] }) => {
   );
 };
 
-export default AddItem;
+export default AddProduct;

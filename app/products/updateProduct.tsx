@@ -22,7 +22,7 @@ const UpdateItem = ({
   const [Description, setDescription] = useState(item.description);
   const [Price, setPrice] = useState(item.price);
   const [Category, setCategory] = useState(item.categoryid);
-  const [Active, setActive] = useState(item.active);
+  const [activeItem, setActiveItem] = useState(item.active);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +35,7 @@ const UpdateItem = ({
       categoryid: Number(Category),
       description: Description,
       price: Number(Price),
-      active: Boolean(Active)
+      active: Boolean(activeItem)
     });
     setIsLoading(false);
     router.refresh();
@@ -46,18 +46,27 @@ const UpdateItem = ({
     setIsOpen(!isOpen);
   };
 
+
+  const handleUpdateActive = (value: string) => {
+    if (value === 'true') {
+      return setActiveItem(true)
+    }
+
+    setActiveItem(false)
+  }
+
   return (
     <div>
       <button className="btn btn-info btn-sm" onClick={handleModal}>
-        Edit
+        Edição
       </button>
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Update {item.description}</h3>
+          <h3 className="font-bold text-lg">Editando {item.description}</h3>
           <form onSubmit={handleUpdate}>
             <div className="form-control w-full">
-              <label className="label font-bold">Product Name</label>
+              <label className="label font-bold">Nome do produto</label>
               <input
                 type="text"
                 value={Description}
@@ -67,7 +76,7 @@ const UpdateItem = ({
               />
             </div>
             <div className="form-control w-full">
-              <label className="label font-bold">Price</label>
+              <label className="label font-bold">Preço</label>
               <input
                 type="text"
                 value={Price}
@@ -77,7 +86,17 @@ const UpdateItem = ({
               />
             </div>
             <div className="form-control w-full">
-              <label className="label font-bold">Brand</label>
+              <label className="label font-bold">Status</label>
+              <select 
+                value={activeItem === true ? 'true' : 'false'}
+                onChange={(e) => handleUpdateActive(e.target.value)} 
+                className="select select-bordered">
+                  <option value={'true'}>Ativo</option>
+                  <option value={'false'}>Inativo</option>
+              </select>
+            </div>
+            <div className="form-control w-full">
+              <label className="label font-bold">Categoria</label>
               <select
                 value={Category}
                 onChange={(e) => setCategory(Number(e.target.value))}
@@ -92,15 +111,15 @@ const UpdateItem = ({
             </div>
             <div className="modal-action">
               <button type="button" className="btn" onClick={handleModal}>
-                Close
+                Fechar
               </button>
               {!isLoading ? (
                 <button type="submit" className="btn btn-primary">
-                  Update
+                  Atualizar
                 </button>
               ) : (
                 <button type="button" className="btn loading">
-                  Updating...
+                  Atualizar...
                 </button>
               )}
             </div>
