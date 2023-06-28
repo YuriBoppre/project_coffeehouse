@@ -19,7 +19,7 @@ Petit Gato - Busca uma experiencia única, com um ambiente acolhedor e relaxante
 ### Modelo Físico:
 
 <a href="https://dbdiagram.io/d/648b307d722eb7749408cc6d">
-<img src="PowerCoffe Database Phys.Model.png">
+<img src="./public/PowerCoffe Database Phys.Model.png">
 </a>
 
 ### Dicionário de Dados:
@@ -30,16 +30,20 @@ Link com acesso ao Dicionário de Dados contendo as tabelas e índices:
 
 ### Scripts DDL Criação do Database:
 
-[Tabelas e FKs](/Scripts/Tables%20and%20FKs.sql)
+- [Tabelas e FKs](/Scripts/Tables%20and%20FKs.sql)
 
 ### Objetos de BD (stored procedure, triggers e functions):
 
 Em desenvolvimento
 
+- [Functions](/Scripts/Functions.sql)
+- [Triggers](/Scripts/Triggers.sql)
+
 ### Scripts Popula tabelas:
 
-[Popula tabelas](/Scripts/Popula%20tabelas.sql)
+- [Popula tabelas](/Scripts/Popula%20tabelas.sql)
 
 ### Código do sistema:
 
 Em desenvolvimento
+- [Pasta Projeto](/app)
