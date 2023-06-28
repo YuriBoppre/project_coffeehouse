@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION f_customerorder_bi()
  LANGUAGE plpgsql
 AS $function$
 BEGIN
-	update coffeetable set ocuppied = true 
+	update coffeetable set occupied = true 
    		where tableid = new.tableid;
 	RETURN NEW;
 END;
