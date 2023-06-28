@@ -19,7 +19,7 @@ Petit Gato - Busca uma experiencia única, com um ambiente acolhedor e relaxante
 ### Modelo Físico:
 
 <a href="https://dbdiagram.io/d/648b307d722eb7749408cc6d">
-<img src="PowerCoffe Database Phys.Model.png">
+<img src="./public/PowerCoffe Database Phys.Model.png">
 </a>
 
 ### Dicionário de Dados:
