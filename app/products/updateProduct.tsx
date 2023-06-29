@@ -31,7 +31,7 @@ const UpdateItem = ({
   const handleUpdate = async (e: SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.patch(`/api/item/${item.itemid}`, {
+    await axios.patch(`/api/products/${item.itemid}`, {
       categoryid: Number(Category),
       description: Description,
       price: Number(Price),

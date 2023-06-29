@@ -18,18 +18,18 @@ const getItems = async () => {
   return res;
 };
 
-const getCategorys = async () => {
+const getCategories = async () => {
   const res = await prisma.category.findMany();
   return res;
 };
 
 const Item = async () => {
-  const [items, categorys] = await Promise.all([getItems(), getCategorys()]);
+  const [items, categories] = await Promise.all([getItems(), getCategories()]);
 
   return (
     <div>
       <div className="mb-2">
-        <AddProduct categorys={categorys} />
+        <AddProduct categorys={categories} />
       </div>
 
       <table className="table w-full">
@@ -37,7 +37,6 @@ const Item = async () => {
           <tr>
             <th>#</th>
             <th>Nome do produto</th>
-            <th>Descrição</th>
             <th>Preço</th>
             <th>Categoria</th>
             <th className="text-center">Ações</th>
@@ -51,7 +50,7 @@ const Item = async () => {
               <td>{i.price}</td>
               <td>{i.category.description}</td>
               <td className="flex justify-center space-x-1">
-                <UpdateProduct category={categorys} item={i} />
+                <UpdateProduct category={categories} item={i} />
                 <DeleteProduct item={i} />
               </td>
             </tr>
@@ -62,4 +61,4 @@ const Item = async () => {
   );
 };
 
-export default getItems;
+export default Item;

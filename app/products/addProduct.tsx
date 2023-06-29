@@ -17,8 +17,8 @@ const AddProduct = ({ categorys }: { categorys: category[] }) => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.post("/api/item", {
-      category: Number(category),
+    await axios.post("/api/products", {
+      categoryid: Number(category),
       description: description,
       price: Number(price),
       active: Boolean(activeItem)
@@ -47,7 +47,7 @@ const AddProduct = ({ categorys }: { categorys: category[] }) => {
   return (
     <div>
       <button className="btn" onClick={handleModal}>
-        Adicionar novo
+        Adicionar produto
       </button>
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
@@ -61,7 +61,7 @@ const AddProduct = ({ categorys }: { categorys: category[] }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="input input-bordered"
-                placeholder="Product Name"
+                placeholder="Nome..."
               />
             </div>
             <div className="form-control w-full">
@@ -71,7 +71,7 @@ const AddProduct = ({ categorys }: { categorys: category[] }) => {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 className="input input-bordered"
-                placeholder="Price"
+                placeholder="Preço"
               />
             </div>
             <div className="form-control w-full">

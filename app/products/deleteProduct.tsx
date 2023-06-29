@@ -19,7 +19,7 @@ const DeleteItem = ({ item }: { item: item }) => {
 
   const handleDelete = async (itemid: number) => {
     setIsLoading(true);
-    await axios.delete(`/api/item/${itemid}`);
+    await axios.delete(`/api/products/${itemid}`);
     setIsLoading(false);
     router.refresh();
     setIsOpen(false);
@@ -38,7 +38,7 @@ const DeleteItem = ({ item }: { item: item }) => {
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">
-            Tem certeza deseja deletar: {item.description}?
+            Tem certeza deseja deletar o produto - {item.description}?
           </h3>
 
           <div className="modal-action">
