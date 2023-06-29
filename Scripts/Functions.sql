@@ -25,7 +25,23 @@ begin
 		return 'Pode Deletar';
 	end if;
 END;$function$;
+
+---------------------------------------------------------------------------------------------------------------------
+
+CREATE or REPLACE FUNCTION all_order_closed(_tableid integer)
+RETURNS boolean
+language plpgsql AS $$
+declare result boolean;
+begin
+	select count(1) = 0 into result
+	from customerorder c
+	where tableid = _tableid and opened;
+	return result;
+END;
+$$;
+
 ------------------------------------------------------------------------
+
 CREATE TYPE t_visits AS (
 	"Cliente" varchar,
 	"Dias visitados" numeric,
@@ -65,10 +81,11 @@ begin
 end;$$;
 
 select *
-from f_cardapio()
+from f_cardapio();
 
 select *
-from f_cardapio(true)
+from f_cardapio(true);
+	
 -------------------------------------------------------------------
 
 create or replace function f_orders(customername varchar, itemdescription varchar, categorydescription varchar, startdate date, finaldate date)
@@ -153,9 +170,9 @@ BEGIN
 END;$$;
 
 select *
-from f_rel_itens_by_qnt('23-06-22 09:30', '23-06-24 09:30')
+from f_rel_itens_by_qnt('23-06-22 09:30', '23-06-24 09:30');
 
 select *
-from f_rel_itens_by_qnt()
+from f_rel_itens_by_qnt();
 
 -------------------------------------------------------------------
