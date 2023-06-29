@@ -25,7 +25,33 @@ begin
 		return 'Pode Deletar';
 	end if;
 END;
--------------------------------------------------------------------
+------------------------------------------------------------------------
+CREATE TYPE t_visits AS (
+	"Cliente" varchar,
+	"Dias visitados" numeric,
+	"Quantia gasta" numeric);
+
+CREATE OR REPLACE FUNCTION f_visits()
+RETURNS TABLE (visit t_visits)
+LANGUAGE plpgsql
+as $$
+begin
+	return query
+	with visits as(
+		select c.name, count(1) as visits_day, sum(co.total) as total
+		from customerorder co
+		join customer c on (co.orderid = c.customerid)
+		where c.customerid = co.customerid
+		group by c.name, cast(co.date as date))
+	select v.name, sum(v.visits_day), sum(v.total)
+	from visits v
+	group by v.name;
+END;$$;
+
+select *
+from f_visits();
+
+-----------------------------------------------------------------------
 create or replace function f_cardapio(include_inactive boolean = false)
 returns table ("CATEGORIA" varchar, "DESCRIÇÃO" varchar, "PREÇO" numeric)
 language plpgsql
