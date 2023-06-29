@@ -1,6 +1,6 @@
-CREATE OR REPLACE FUNCTION f_veriricaitem(_itemid int)
-RETURNS varchar
-LANGUAGE plpgsql
+create or REPLACE function f_veriricaitem(_itemid int)
+returns varchar
+language plpgsql
 AS $function$
 declare _opened boolean;
 declare _closed boolean;
@@ -25,4 +25,56 @@ begin
 		return 'Pode Deletar';
 	end if;
 END;
+-------------------------------------------------------------------
+create or replace function f_cardapio(include_inactive boolean = false)
+returns table ("CATEGORIA" varchar, "DESCRIÇÃO" varchar, "PREÇO" numeric)
+language plpgsql
+as $$
+begin
+	return query 
+	select category.description as "CATEGORIA", item.description as "DESCRIÇÃO", item.price as "PREÇO" 
+	from item
+	INNER JOIN category ON item.categoryid = category.categoryid
+	WHERE item.active or include_inactive
+	order by category.description asc;
+end;$$;
+
+select *
+from f_cardapio()
+
+select *
+from f_cardapio(true)
+-------------------------------------------------------------------
+
+create or replace function f_orders(customername varchar, itemdescription varchar, categorydescription varchar, startdate date, finaldate date)
+returns setof record
+language plpgsql
+as $$
+declare i record;
+begin
+	for i in
+		select customer.name, item.description, category.description, sum(orderitem.quantity) as quantity
+		from customerorder
+		inner join customer on customerorder.customerid = customer.customerid
+		inner join orderitem on customerorder.orderid = orderitem.orderid 
+		inner join item on orderitem.itemid = item.itemid
+		inner join category on item.categoryid = category.categoryid
+		where (customer.name = customername or '' = customername) and 
+			  (item.description = itemdescription or '' = itemdescription) and 
+			  (category.description = categorydescription or '' = categorydescription) and 
+			  customerorder.date between startdate and finaldate
+		group by customer.name, item.description, category.description
+		order by quantity desc
+	loop
+		return next i;
+	end loop;
+end;$$;
+
+select *
+from f_orders('', '', '', '23-06-03 09:30', '23-06-24 09:30') as (customer varchar, item varchar, category varchar, quantity bigint);
+
+select customer, category, sum(quantity)
+from f_orders('', '', '', '23-06-03 09:30', '23-06-24 09:30') as (customer varchar, item varchar, category varchar, quantity bigint)
+group by customer, category
+order by 3 desc;
 $function$;
