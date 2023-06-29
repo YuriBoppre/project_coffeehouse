@@ -102,3 +102,60 @@ select customer, category, sum(quantity)
 from f_orders('', '', '', '23-06-03 09:30', '23-06-24 09:30') as (customer varchar, item varchar, category varchar, quantity bigint)
 group by customer, category
 order by 3 desc;
+
+-------------------------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE p_rel_itens_by_qnt(startdate date, finaldate date, _itemid integer, OUT _rel record)
+LANGUAGE plpgsql AS
+$$
+BEGIN
+    SELECT c.description as category, i.description as item, i.price, SUM(oi.quantity) as quantity
+    FROM item i
+    JOIN orderitem oi on (i.itemid = oi.itemid)
+    JOIN customerorder o on (o.orderid = oi.orderid)
+    JOIN category c on (i.categoryid = c.categoryid)
+    WHERE i.itemid = _itemid and o.date between startdate and finaldate
+    GROUP BY c.description, i.description, i.price
+    INTO _rel;
+
+    IF _rel is null THEN
+        SELECT c.description as category, i.description as item, i.price as price, cast(0 as bigint) as quantity
+        FROM item i
+        JOIN category c on (i.categoryid = c.categoryid)
+        WHERE i.itemid = _itemid
+        GROUP BY c.description, i.description, i.price
+        INTO _rel;
+    END IF;
+END;$$;
+
+CREATE OR REPLACE FUNCTION f_rel_itens_by_qnt(startdate date = '2023-01-01 00:00', finaldate date = '2023-12-31 23:59')
+RETURNS TABLE ("Categoria" varchar, "Item" varchar, "Preço" numeric, "Quantidade" bigint)
+LANGUAGE plpgsql AS $$
+DECLARE rel record;
+DECLARE i record;
+BEGIN
+	CREATE TEMPORARY TABLE temp_rel (
+		category varchar,
+		item varchar,
+		price numeric,
+		quantity bigint
+	);
+	FOR i IN
+	SELECT itemid
+	FROM item
+	WHERE active
+	LOOP
+		CALL p_rel_itens_by_qnt(startdate, finaldate, i.itemid, rel);
+		INSERT INTO temp_rel VALUES (rel.category, rel.item, rel.price, rel.quantity);
+	END LOOP;
+	RETURN QUERY SELECT * FROM temp_rel ORDER BY quantity DESC;
+	DROP TABLE temp_rel;
+END;$$;
+
+select *
+from f_rel_itens_by_qnt('23-06-22 09:30', '23-06-24 09:30')
+
+select *
+from f_rel_itens_by_qnt()
+
+-------------------------------------------------------------------
