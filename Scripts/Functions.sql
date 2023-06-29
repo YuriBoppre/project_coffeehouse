@@ -40,7 +40,34 @@ begin
 END;
 $$;
 
-------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION f_pop_category_by_customer(qnt_customers_orders integer = 1)
+RETURNS TABLE ("Categoria" varchar, "Quantidade de pedidos" bigint)
+language plpgsql
+AS $$
+BEGIN
+	RETURN query
+	SELECT c.description, COUNT(*) AS total_de_pedidos
+	FROM category c
+	JOIN item i ON c.categoryid = i.categoryid
+	JOIN orderitem oi ON i.itemid = oi.itemid
+	JOIN customerorder co ON oi.orderid = co.orderid
+	JOIN (
+	    SELECT customerid
+	    FROM customerorder
+	    GROUP BY customerid
+	    HAVING COUNT(orderid) > qnt_customers_orders
+	) sub ON co.customerid = sub.customerid
+	GROUP BY c.description
+	ORDER BY total_de_pedidos DESC;	
+END;$$;
+
+SELECT *
+FROM f_pop_category_by_customer()
+	
+SELECT*
+FROM f_pop_category_by_customer(2)
+---------------------------------------------------------------------------------------------------------------------
 
 CREATE TYPE t_visits AS (
 	"Cliente" varchar,
@@ -66,7 +93,8 @@ END;$$;
 select *
 from f_visits();
 
------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+
 create or replace function f_cardapio(include_inactive boolean = false)
 returns table ("CATEGORIA" varchar, "DESCRIÇÃO" varchar, "PREÇO" numeric)
 language plpgsql
@@ -86,7 +114,7 @@ from f_cardapio();
 select *
 from f_cardapio(true);
 	
--------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
 
 create or replace function f_orders(customername varchar, itemdescription varchar, categorydescription varchar, startdate date, finaldate date)
 returns setof record
@@ -120,7 +148,7 @@ from f_orders('', '', '', '23-06-03 09:30', '23-06-24 09:30') as (customer varch
 group by customer, category
 order by 3 desc;
 
--------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
 
 CREATE OR REPLACE PROCEDURE p_rel_itens_by_qnt(startdate date, finaldate date, _itemid integer, OUT _rel record)
 LANGUAGE plpgsql AS
