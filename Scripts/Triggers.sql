@@ -68,20 +68,6 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER payment_bi BEFORE insert ON payment for each row EXECUTE FUNCTION f_payment_bi();
 
----------------------------------------------------------------------------------------------------------------------
-
-CREATE or REPLACE FUNCTION all_order_closed(_tableid integer)
-RETURNS boolean
-language plpgsql AS $$
-declare result boolean;
-begin
-	select count(1) = 0 into result
-	from customerorder c
-	where tableid = _tableid and opened;
-	return result;
-END;
-$$;
-
 ------------------------------------------------------------
 
 CREATE or REPLACE FUNCTION f_customerorder_au()
@@ -116,3 +102,24 @@ $$;
 
 CREATE TRIGGER coffeetable_bu AFTER UPDATE ON coffeetable for each row EXECUTE FUNCTION f_coffeetable_bu();
 
+------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION f_item_bd()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+declare item_status varchar;
+BEGIN
+	select f_veriricaitem(old.itemid) into item_status;
+	if item_status = 'Pode Inativar' then
+		update item i set active = false where i.itemid = old.itemid;
+		RAISE NOTICE 'Item possui pedidos, então será inativado!';
+		return null;
+	elsif item_status = 'Bloqueado' then
+		RAISE EXCEPTION 'Item possui pedido em aberto, não é possível deletar/inativar!';
+	end if;
+	RETURN OLD;
+END;
+$function$;
+
+create trigger item_bd before delete on item for each row execute procedure f_item_bd();
