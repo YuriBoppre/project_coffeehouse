@@ -45,5 +45,4 @@ Em desenvolvimento
 
 ### Código do sistema:
 
-Em desenvolvimento
 - [Pasta Projeto](/app)
