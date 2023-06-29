@@ -24,7 +24,7 @@ begin
 	else 
 		return 'Pode Deletar';
 	end if;
-END;
+END;$function$;
 ------------------------------------------------------------------------
 CREATE TYPE t_visits AS (
 	"Cliente" varchar,
@@ -103,4 +103,3 @@ select customer, category, sum(quantity)
 from f_orders('', '', '', '23-06-03 09:30', '23-06-24 09:30') as (customer varchar, item varchar, category varchar, quantity bigint)
 group by customer, category
 order by 3 desc;
-$function$;
