@@ -40,8 +40,7 @@ begin
 	with visits as(
 		select c.name, count(1) as visits_day, sum(co.total) as total
 		from customerorder co
-		join customer c on (co.orderid = c.customerid)
-		where c.customerid = co.customerid
+		join customer c on (c.customerid = co.customerid)
 		group by c.name, cast(co.date as date))
 	select v.name, sum(v.visits_day), sum(v.total)
 	from visits v
